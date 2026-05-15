@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Raid Lead Quick Sheet</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Exo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #f0c040;
+    --gold-dim: #c8972a;
+    --fire: #ff6a1a;
+    --green-check: #4cde7a;
+    --bg-deep: #0d0f14;
+    --bg-card: #141820;
+    --bg-card2: #1a1f2e;
+    --border-subtle: rgba(240,192,64,0.15);
+    --border-fire: rgba(255,106,26,0.4);
+    --text-main: #dde3f0;
+    --text-muted: #8899bb;
+    --shadow-gold: 0 0 18px rgba(240,192,64,0.12);
+    --shadow-fire: 0 0 22px rgba(255,106,26,0.18);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg-deep);
+    color: var(--text-main);
+    font-family: 'Exo 2', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(240,192,64,0.07) 0%, transparent 70%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.015) 39px, rgba(255,255,255,0.015) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.015) 39px, rgba(255,255,255,0.015) 40px);
+  }
+
+  .page-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 60px;
+  }
+
+  /* ─── INSTANCE HEADER ─── */
+  .instance-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-subtle);
+  }
+
+  .instance-icon {
+    font-size: 2rem;
+    line-height: 1;
+  }
+
+  .instance-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    text-shadow: 0 0 24px rgba(240,192,64,0.35);
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-top: 1px;
+  }
+
+  /* ─── BOSS GRID ─── */
+  .boss-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+    margin-bottom: 40px;
+  }
+
+  /* ─── BOSS CARD ─── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 16px 18px 14px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green-check), rgba(76,222,122,0.2));
+    border-radius: 10px 10px 0 0;
+  }
+
+  .card.wall::before {
+    background: linear-gradient(90deg, var(--fire), rgba(255,106,26,0.2));
+  }
+
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+  }
+
+  .card.wall:hover {
+    box-shadow: var(--shadow-fire);
+  }
+
+  .card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .card-icon {
+    font-size: 1.1rem;
+    line-height: 1;
+  }
+
+  .card-name {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #fff;
+    letter-spacing: 0.03em;
+  }
+
+  .card.wall .card-name {
+    color: #ffb870;
+  }
+
+  .wall-badge {
+    margin-left: auto;
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fire);
+    background: rgba(255,106,26,0.12);
+    border: 1px solid rgba(255,106,26,0.3);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+
+  /* ─── BOSS MECHANICS ─── */
+  .mechanics {
+    list-style: none;
+    margin-bottom: 10px;
+  }
+
+  .mechanics li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 3px 0;
+    font-size: 0.875rem;
+    color: var(--text-main);
+  }
+
+  .mechanics li::before {
+    content: '›';
+    color: var(--gold-dim);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
+  .mechanics li strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ─── PHASE LIST (Vashj / Kael) ─── */
+  .phases {
+    margin-bottom: 10px;
+  }
+
+  .phase-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 0;
+    font-size: 0.875rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .phase-row:last-child { border-bottom: none; }
+
+  .phase-label {
+    font-weight: 800;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fire);
+    background: rgba(255,106,26,0.1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    white-space: nowrap;
+    margin-top: 1px;
+  }
+
+  .phase-text {
+    color: var(--text-main);
+  }
+
+  .phase-text strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ─── WIPE WARNING ─── */
+  .wipe-section {
+    margin-top: 10px;
+    padding: 8px 10px;
+    background: rgba(220,40,40,0.07);
+    border-left: 3px solid rgba(220,40,40,0.5);
+    border-radius: 0 6px 6px 0;
+  }
+
+  .wipe-label {
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e05050;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .wipe-label::before { content: '☠'; font-size: 0.8rem; }
+
+  .wipe-list {
+    list-style: none;
+  }
+
+  .wipe-list li {
+    font-size: 0.82rem;
+    color: #cc8888;
+    padding: 1px 0;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  .wipe-list li::before {
+    content: '–';
+    opacity: 0.6;
+    flex-shrink: 0;
+  }
+
+  /* ─── CONSUMABLES FOOTER ─── */
+  .consumables {
+    background: var(--bg-card2);
+    border: 1px solid var(--border-subtle);
+    border-radius: 10px;
+    padding: 18px 22px;
+    margin-top: 10px;
+  }
+
+  .consumables-header {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .consumables-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  .theme-banner {
+    font-family: 'Cinzel', serif;
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-subtle);
+    text-shadow: 0 0 20px rgba(240,192,64,0.25);
+  }
+
+  .cons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  .cons-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 6px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .cons-item::before {
+    content: '⚗';
+    font-size: 0.9rem;
+    opacity: 0.65;
+  }
+
+  /* ─── SECTION DIVIDER ─── */
+  .section-divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+    margin: 10px 0 30px;
+  }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+  <!-- ══════════════════════════════ SSC ══════════════════════════════ -->
+  <div class="instance-header">
+    <div class="instance-icon">🐍</div>
+    <div>
+      <div class="instance-title">SSC — Quick Raid Lead Sheet</div>
+      <div class="subtitle">Serpentshrine Cavern</div>
+    </div>
+  </div>
+
+  <div class="boss-grid">
+
+    <!-- Hydross -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Hydross the Unstable</span>
+      </div>
+      <ul class="mechanics">
+        <li>Tanks swap on <strong>marks (4 stacks)</strong></li>
+        <li>Clean transitions = <strong>no extra adds</strong></li>
+        <li>Frost/Nature resist tanks required</li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>bad transitions</li>
+          <li>tank not ready → add explosion</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Lurker -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">The Lurker Below</span>
+      </div>
+      <ul class="mechanics">
+        <li>Everyone <strong>out of water</strong> unless assigned</li>
+        <li><strong>Spout = run, don't panic</strong></li>
+        <li>Submerge phase → kill adds fast</li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>people in water</li>
+          <li>bad spout movement</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Leotheras -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Leotheras the Blind</span>
+      </div>
+      <ul class="mechanics">
+        <li>Demon phase → <strong>warlocks tank</strong></li>
+        <li>Inner demon phase → <strong>handle own</strong></li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>people failing inner demon</li>
+          <li>bad demon control</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Karathress -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Fathom-Lord Karathress</span>
+      </div>
+      <ul class="mechanics">
+        <li>Kill order matters (healer → shaman → hunter → boss)</li>
+        <li>Interrupts + control on adds</li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>bad kill order</li>
+          <li>healer add not dying fast</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Morogrim -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Morogrim Tidewalker</span>
+      </div>
+      <ul class="mechanics">
+        <li>Murloc waves → <strong>AOE control</strong></li>
+        <li>Earthquake → <strong>heal through</strong></li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>murlocs overwhelming raid</li>
+          <li>weak AoE coordination</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Lady Vashj (Wall) -->
+    <div class="card wall">
+      <div class="card-title">
+        <span class="card-icon">🔥</span>
+        <span class="card-name">Lady Vashj</span>
+        <span class="wall-badge">SSC Wall</span>
+      </div>
+      <div class="phases">
+        <div class="phase-row">
+          <span class="phase-label">P1</span>
+          <span class="phase-text">Tank + spank, control adds</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-label">P2</span>
+          <span class="phase-text"><strong>Core tossing</strong> (spine mechanics) — Kill striders + naga</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-label">P3</span>
+          <span class="phase-text">Burn boss, watch damage</span>
+        </div>
+      </div>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>bad core passing</li>
+          <li>striders loose</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /boss-grid SSC -->
+
+  <div class="section-divider"></div>
+
+  <!-- ══════════════════════════════ TK ══════════════════════════════ -->
+  <div class="instance-header">
+    <div class="instance-icon">🏰</div>
+    <div>
+      <div class="instance-title">TK — Quick Raid Lead Sheet</div>
+      <div class="subtitle">Tempest Keep: The Eye</div>
+    </div>
+  </div>
+
+  <div class="boss-grid">
+
+    <!-- Al'ar -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Al'ar</span>
+      </div>
+      <ul class="mechanics">
+        <li>Tank swap on platform phases</li>
+        <li>Flame patches → move cleanly</li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>bad repositioning</li>
+          <li>tanks not swapping</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Void Reaver -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">Void Reaver <span style="font-size:0.75rem;font-weight:600;color:var(--text-muted)">(Free Boss)</span></span>
+      </div>
+      <ul class="mechanics">
+        <li>Spread out</li>
+        <li>Dodge orbs</li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>clumping</li>
+          <li>people not moving</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Solarion -->
+    <div class="card">
+      <div class="card-title">
+        <span class="card-icon">✅</span>
+        <span class="card-name">High Astromancer Solarion</span>
+      </div>
+      <ul class="mechanics">
+        <li>Stack correctly for wrath</li>
+        <li><strong>Spread during bombs</strong></li>
+      </ul>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>bomb not spread</li>
+          <li>sloppy positioning</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Kael'thas (Wall) -->
+    <div class="card wall">
+      <div class="card-title">
+        <span class="card-icon">🔥</span>
+        <span class="card-name">Kael'thas</span>
+        <span class="wall-badge">Tier Wall</span>
+      </div>
+      <div class="phases">
+        <div class="phase-row">
+          <span class="phase-label">P1</span>
+          <span class="phase-text">Advisors one by one — control abilities</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-label">P2</span>
+          <span class="phase-text">Weapons → <strong>pick correct weapon</strong></span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-label">P3</span>
+          <span class="phase-text">Advisors come back → chaos phase — target focus matters</span>
+        </div>
+        <div class="phase-row">
+          <span class="phase-label">P4</span>
+          <span class="phase-text">Kael active → long fight — mind control + mechanics</span>
+        </div>
+      </div>
+      <div class="wipe-section">
+        <div class="wipe-label">Wipes come from</div>
+        <ul class="wipe-list">
+          <li>people not picking weapons</li>
+          <li>poor target focus</li>
+          <li>losing control in Phase 3</li>
+        </ul>
+      </div>
+    </div>
+
+  </div><!-- /boss-grid TK -->
+
+  <!-- ══════════════════════════ CONSUMABLES ══════════════════════════ -->
+  <div class="consumables">
+    <div class="theme-banner">⚔ Mechanics &gt; DPS — Stay Alive ⚔</div>
+    <div class="consumables-header">⚗ Required Consumables — Everyone</div>
+    <div class="cons-grid">
+      <div class="cons-item">Flask (or 2 elixirs)</div>
+      <div class="cons-item">Food buff</div>
+      <div class="cons-item">Melee Strength scroll</div>
+      <div class="cons-item">Melee Agility scroll</div>
+      <div class="cons-item">Caster Weapon Oil</div>
+      <div class="cons-item">Healer Weapon Oil</div>
+      <div class="cons-item">Haste Potions</div>
+      <div class="cons-item">Mana Potions</div>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+</body>
+</html>
